@@ -13,6 +13,8 @@ export default function PostIndex(props) {
                 ${props.posts.map(post => `<h3>${post.title}</h3>
 <p>${post.content}</p>`).join('')}
             </div>
+            
+<!--            add post button-->
             <div id="add-post-form">
                 <div>
                     <input type="text" class="form-control" id="add-post-title" placeholder="Add Post Title">
@@ -25,6 +27,35 @@ export default function PostIndex(props) {
                 <div>
                     <button type="submit" class="btn btn-primary" id="submit-btn">Submit</button>
                 </div>
+            </div>
+
+<!--            edit post button-->
+            
+            <div>
+                <input type="text" class="form-control" id="add-post-title" placeholder="Add Post Title">
+            </div>
+            <div>
+                    <textarea class="form-control" rows="4" id="add-post-content"
+                              placeholder="Add Post Content"></textarea>
+            </div>
+            <br>
+            <div>
+                <button type="submit" class="btn btn-primary" id="submit-btn">Submit</button>
+            </div>
+            </div>
+
+<!--            delete post button-->
+            <div>
+                <input type="text" class="form-control" id="add-post-title" placeholder="Add Post Title">
+            </div>
+            <div>
+                    <textarea class="form-control" rows="4" id="add-post-content"
+                              placeholder="Add Post Content"></textarea>
+            </div>
+            <br>
+            <div>
+                <button type="submit" class="btn btn-primary" id="submit-btn">Submit</button>
+            </div>
             </div>
         </main>
     `;
