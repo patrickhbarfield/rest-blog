@@ -14,12 +14,11 @@ public class User {
 
     public enum Role {USER, ADMIN};
 
-    public User(Long id, String username, String email, String password, LocalDateTime createdAt) {
+    public User(Long id, String username, String email, String password) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
-        this.createdAt = createdAt;
     }
 
     public Long getId() {
@@ -60,6 +59,14 @@ public class User {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     @Override

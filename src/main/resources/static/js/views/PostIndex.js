@@ -11,7 +11,9 @@ export default function PostIndex(props) {
         <main>
             <div id="posts-container">
                 ${props.posts.map(post => `<h3>${post.title}</h3>
-<p>${post.content}</p>`).join('')}
+<!--post content goes here-->
+<p>${post.content}</p>
+`).join('')}
             </div>
             
 <!--            add post button-->

@@ -17,13 +17,14 @@ public class UsersController {
         return userList;
     }
 
-    @GetMapping("(id)")
+    @GetMapping("{id}")
     public User getById(@PathVariable long id) {
         for (User user : userList) {
             if (user.getId().equals(id)) {
                 return user;
             }
         }
+        return null;
     }
 
     @PostMapping
@@ -33,10 +34,10 @@ public class UsersController {
 
     //just for testing
     private List<User> setUserList() {
-        List<User> UserList = new ArrayList<>();
-        userList.add(new User("billybob", "billybob.com", "1234"));
-        userList.add(new User("sindy", "sindy.com", "432211234"));
-
+        List<User> userList = new ArrayList<>();
+        userList.add(new User(1L, "billybob", "billybob.com", "1234"));
+        userList.add(new User(2L, "sindy", "sindy.com", "432211234"));
+        return userList;
     }
 }
 
