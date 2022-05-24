@@ -1,8 +1,11 @@
 package com.example.restblog.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.catalina.Role;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class User {
     private Long id;
@@ -12,7 +15,17 @@ public class User {
     private LocalDateTime createdAt = LocalDateTime.now();
     private Role role = Role.USER;
 
-    public enum Role {USER, ADMIN};
+    @JsonIgnoreProperties("user") // we want to ignore the post.user field to prevent a StackOverflowError
+    private List<Post> posts = new ArrayList<>();// 1 user has authored many posts - this is how we illustrate the relationship
+
+
+    public enum Role {USER, ADMIN}
+
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
 
     public User(Long id, String username, String email, String password) {
         this.id = id;
@@ -20,6 +33,10 @@ public class User {
         this.email = email;
         this.password = password;
     }
+
+    public User() {
+    }
+
 
     public Long getId() {
         return id;
@@ -67,6 +84,15 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    // TODO: don't forget getters and setters for the posts!
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 
     @Override
