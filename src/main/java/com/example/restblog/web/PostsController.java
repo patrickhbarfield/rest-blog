@@ -1,6 +1,7 @@
 package com.example.restblog.web;
 
 import com.example.restblog.data.Post;
+import com.example.restblog.service.EmailService;
 import org.springframework.web.bind.annotation.*;
 import com.example.restblog.service.UserService;
 
@@ -14,9 +15,11 @@ public class PostsController {
 
     // TODO: see UsersController for the "why" of this
     private final UserService userService;
+    private final EmailService emailService;
 
-    public PostsController(UserService userService){
+    public PostsController(UserService userService, EmailService emailService) {
         this.userService = userService;
+        this.emailService = emailService;
     }
 
 //    List<Post> posts = new ArrayList<>();
@@ -40,6 +43,7 @@ public class PostsController {
         }
         return null;
     }
+
     @PostMapping
     public void createPost(@RequestBody Post postToAdd) {
         // TODO: If you want to associate the user to the post here, be sure to include a user object property on the post from the client side
@@ -47,7 +51,7 @@ public class PostsController {
     }
 
     @PostMapping("{username}")
-    public void createByUsername(@PathVariable String username, @RequestBody Post newPost){
+    public void createByUsername(@PathVariable String username, @RequestBody Post newPost) {
         // Nice and clean, huh?
         userService.addPost(newPost, username);
     }
@@ -55,8 +59,8 @@ public class PostsController {
     @PutMapping("{id}")
     public void updatePost(@PathVariable Long id, @RequestBody Post updatedPost) {
         // TODO: refactor this ALL out of here to a public method in UserService
-        for (Post post : userService.getPostList()){
-            if (post.getId().equals(id)){
+        for (Post post : userService.getPostList()) {
+            if (post.getId().equals(id)) {
                 post.setContent(updatedPost.getContent());
                 post.setTitle(updatedPost.getTitle());
             }

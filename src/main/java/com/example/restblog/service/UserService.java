@@ -1,6 +1,12 @@
 package com.example.restblog.service;
+
 import com.example.restblog.data.Post;
 import com.example.restblog.data.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,16 +21,16 @@ public class UserService {
     private List<User> userList = setUserList();
     private List<Post> posts = setPostList();
 
-    public List<User> getUsersList(){
+    public List<User> getUsersList() {
         return userList;
     }
 
-    public List<Post> getPostList(){
+    public List<Post> getPostList() {
         return posts;
     }
 
     // We need to associate posts and users here
-    public void addPost(Post newPost, String username){
+    public void addPost(Post newPost, String username) {
 
         // get the User object who made the post
         User user = getUserByUsername(username);
@@ -39,9 +45,9 @@ public class UserService {
     }
 
     // Taken from UsersController
-    public User getUserById(Long id){
-        for (User user : userList){
-            if (user.getId().equals(id)){
+    public User getUserById(Long id) {
+        for (User user : userList) {
+            if (user.getId().equals(id)) {
                 return user;
             }
         }
@@ -49,20 +55,21 @@ public class UserService {
     }
 
     // Taken from UsersController
-    public User getUserByUsername(String username){
-        for (User user : userList){
-            if (user.getUsername().equals(username)){
+    public User getUserByUsername(String username) {
+        for (User user : userList) {
+            if (user.getUsername().equals(username)) {
                 return user;
             }
-        };
+        }
+        ;
         return null;
     }
 
-    public void deletePostById(long id){
-        for (Post post : posts){
+    public void deletePostById(long id) {
+        for (Post post : posts) {
             // Usually we don't want to delete an element from the current list in a loop
             // but we can do it here because we are only deleting ONE element, then returning out of the method
-            if (post.getId() == id){
+            if (post.getId() == id) {
                 posts.remove(post);
                 return;
             }
@@ -70,7 +77,7 @@ public class UserService {
     }
 
     // Taken from UsersController
-    private List<User> setUserList(){
+    private List<User> setUserList() {
         List<User> userList = new ArrayList<>();
         userList.add(new User(1L, "billybobboy", "billy@bob.com", "12345"));
         userList.add(new User(2L, "annarafael", "anna@gmail.com", "54321"));
@@ -78,7 +85,7 @@ public class UserService {
     }
 
     // Taken from PostsController
-    private List<Post> setPostList(){
+    private List<Post> setPostList() {
         List<Post> postList = new ArrayList<>();
         postList.add(new Post(1L, "Cool title", "Cool content", userList.get(0)));
         postList.add(new Post(2L, "Fake title", "Fake content", userList.get(1)));
