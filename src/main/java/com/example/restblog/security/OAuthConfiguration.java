@@ -48,22 +48,12 @@ public class OAuthConfiguration extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory()
-                .withClient(clientId)
-                .secret(passwordEncoder.encode(clientSecret))
-                .accessTokenValiditySeconds(accessTokenValiditySeconds)
-                .refreshTokenValiditySeconds(refreshTokenValiditySeconds)
-                .authorizedGrantTypes(authorizedGrantTypes)
-                .scopes("read", "write")
-                .resourceIds("api");
+        clients.inMemory().withClient(clientId).secret(passwordEncoder.encode(clientSecret)).accessTokenValiditySeconds(accessTokenValiditySeconds).refreshTokenValiditySeconds(refreshTokenValiditySeconds).authorizedGrantTypes(authorizedGrantTypes).scopes("read", "write").resourceIds("api");
     }
 
     @Override
     public void configure(final AuthorizationServerEndpointsConfigurer endpoints) {
-        endpoints
-                .accessTokenConverter(accessTokenConverter())
-                .userDetailsService(userService)
-                .authenticationManager(authenticationManager);
+        endpoints.accessTokenConverter(accessTokenConverter()).userDetailsService(userService).authenticationManager(authenticationManager);
     }
 
     @Bean
@@ -73,4 +63,5 @@ public class OAuthConfiguration extends AuthorizationServerConfigurerAdapter {
     }
 
 }
+
 

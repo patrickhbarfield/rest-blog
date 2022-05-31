@@ -1,8 +1,10 @@
 package com.example.restblog.web;
 
-import com.example.restblog.service.UserService;
+
 import com.example.restblog.data.Post;
 import com.example.restblog.data.User;
+import com.example.restblog.service.UserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -12,31 +14,38 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/users", headers = "Accept=application/json")
 public class UsersController {
+
     // Once the adding and getting of users is removed, we have to inject the UserService into the controller
     private final UserService userService;
+    private PasswordEncoder passwordEncoder;
 
-    public UsersController(UserService userService) {
+    public UsersController(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService; // injection point of UserService
+        this.passwordEncoder = passwordEncoder;
     }
 
     // TODO: once all the code for users is taken out, be sure to refactor the controller methods to call on UserService!
     @GetMapping
-    public List<User> getAll() {
+    public List<User> getAll(){
         return userService.getUsersList();
     }
 
     @GetMapping("{id}")
-    public User getById(@PathVariable long id) {
+    public User getById(@PathVariable long id){
         return userService.getUserById(id);
     }
 
-    @PostMapping
-    public void create(@RequestBody User newUser) {
-        userService.getUsersList().add(newUser);
+
+    // TODO: add "create" to the path
+    @PostMapping("create")
+    public void create(@RequestBody User newUser){
+        // TODO: inject the PasswordEncoder and set the incoming password as below
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        userService.createUser(newUser);
     }
 
     @PostMapping("{username}")
-    public void addUserPost(@PathVariable String username, @RequestBody Post newPost) {
+    public void addUserPost(@PathVariable String username, @RequestBody Post newPost){
         User user = userService.getUserByUsername(username);
         user.getPosts().add(newPost);
     }
@@ -60,4 +69,12 @@ public class UsersController {
         userToUpdate.setPassword(newPassword);
         System.out.println(userToUpdate.getPassword());
     }
+
+    @PatchMapping("{userId}")
+    public void updateEmail(@PathVariable Long userId, @RequestParam String newEmail){
+        userService.updateEmail(userId, newEmail);
+    }
+
+
+
 }

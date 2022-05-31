@@ -1,9 +1,10 @@
 package com.example.restblog.web;
 
 import com.example.restblog.data.Post;
-import com.example.restblog.service.EmailService;
+import com.example.restblog.dto.CreatePostDto;
+//import com.example.restblog.service.EmailService;
+import com.example.restblog.service.PostService;
 import org.springframework.web.bind.annotation.*;
-import com.example.restblog.service.UserService;
 
 import java.util.List;
 import java.util.Objects;
@@ -13,30 +14,26 @@ import java.util.Objects;
 @RequestMapping(value = "/api/posts", headers = "Accept=application/json")
 public class PostsController {
 
-    // TODO: see UsersController for the "why" of this
-    private final UserService userService;
-    private final EmailService emailService;
+    private final PostService postService;
+//    private final EmailService emailService;
 
-    public PostsController(UserService userService, EmailService emailService) {
-        this.userService = userService;
-        this.emailService = emailService;
+    public PostsController(
+            PostService postService
+            /* EmailService emailService*/){
+        this.postService = postService;
+//        this.emailService = emailService;
     }
-
-//    List<Post> posts = new ArrayList<>();
 
     @GetMapping
     public List<Post> getAll() {
-        return userService.getPostList();
-//        posts.add(new Post(1L, "Argonne National Laboratory", "A Real-Time Intelligent Speed Optimization Planner Using Reinforcement Learning"));
-//        posts.add(new Post(2L, "National Renewable Energy Laboratory", "Shared Automated Vehicle Fleet Operations for First-Mile Last-Mile Transit Connections with Dynamic Pooling"));
-//        posts.add(new Post(3L, "Oak Ridge National Laboratory", "Hybrid Neural Network Modeling for Multiple Intersections along Signalized Arterials - Current Situation and Some New Results"));
-//        return posts;
+        return postService.getPostList();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public Post getById(@PathVariable Long id) {
+
         // TODO: refactor this all out of here
-        for (Post post : userService.getPostList()) {
+        for (Post post : postService.getPostList()) {
             if (Objects.equals(post.getId(), id)) {
                 return post;
             }
@@ -51,25 +48,28 @@ public class PostsController {
     }
 
     @PostMapping("{username}")
-    public void createByUsername(@PathVariable String username, @RequestBody Post newPost) {
+    public void createByUsername(@PathVariable String username, @RequestBody CreatePostDto dto){
         // Nice and clean, huh?
-        userService.addPost(newPost, username);
+        Post newPost = new Post();
+        postService.addPost(dto, newPost,username);
+//        emailService.prepareAndSend(newPost, "New Post Created", "You've created a new post.");
     }
 
     @PutMapping("{id}")
     public void updatePost(@PathVariable Long id, @RequestBody Post updatedPost) {
         // TODO: refactor this ALL out of here to a public method in UserService
-        for (Post post : userService.getPostList()) {
-            if (post.getId().equals(id)) {
-                post.setContent(updatedPost.getContent());
-                post.setTitle(updatedPost.getTitle());
-            }
-        }
+        postService.updatePost(id, updatedPost);
     }
 
     @DeleteMapping("{id}")
     public void deletePost(@PathVariable Long id) {
         // TODO: add a public method in UserService to actually delete a Post by ID. Invoke that method here
-        userService.deletePostById(id);
+        postService.deletePostById(id);
     }
+
+    @GetMapping("search")
+    public List<Post> searchPosts(@RequestParam String keyword) {
+        return postService.getPostsByTitleKeyword(keyword);
+    }
+
 }

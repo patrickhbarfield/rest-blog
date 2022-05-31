@@ -1,24 +1,27 @@
 export default function Register(){
-    return `<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8"/>
-    <title>Register</title>
-</head>
-<body>
-<h1>Register</h1>
+    //language=HTML
+    return `
+      <!DOCTYPE html>
+      <html lang="en">
+        <head>
+          <meta charset="UTF-8"/>
+          <title>Register</title>
+        </head>
+        <body>
+          <h1>Register! ONE OF US ONE OF US</h1>
 
-<form id="register-form">
-    <label for="username">Username</label>
-    <input id="username" name="username" type="text"/>
-     <label for="email">email</label>
-    <input id="email" name="email" type="email"</input>
-    <label for="password">Password</label>
-    <input id="password" name="password" type="password"/>
-    <input id="register-btn" type="button" value="Register"/>
-</form>
-</body>
-</html>`;
+          <form id="register-form">
+            <label for="username">Username</label>
+            <input id="username" name="username" type="text"/>
+            <label for="email">Email</label>
+            <input id="email" type="email" name="email">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password"/>
+            <input id="register-btn" type="button" value="Register"/>
+          </form>
+        </body>
+      </html>
+    `;
 }
 
 export function RegisterEvent(){
@@ -28,15 +31,19 @@ export function RegisterEvent(){
             email: $('#email').val(),
             password: $('#password').val()
         }
-      const options = {
+
+        const options = {
             headers: {
                 "Content-Type":"application/json"
             },
-          method:'POST',
+            method: 'POST',
             body: JSON.stringify(reqBody)
-      }
+        }
 
-      fetch("http://localhost:8080/api/users", options)
-          .catch(err => console.log(err))
+        fetch("http://localhost:8080/api/users/create", options)
+            .then(res => res.json())
+            .then(data => console.log(data))
+            .catch(err => console.log(err))
+
     })
 }

@@ -1,25 +1,33 @@
 package com.example.restblog.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.apache.catalina.Role;
+import org.hibernate.annotations.DynamicUpdate;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "users")
+@DynamicUpdate
 public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
     private String email;
     private String password;
     private LocalDateTime createdAt = LocalDateTime.now();
+    @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
 
+    @OneToMany(mappedBy = "user")
     @JsonIgnoreProperties("user") // we want to ignore the post.user field to prevent a StackOverflowError
     private List<Post> posts = new ArrayList<>();// 1 user has authored many posts - this is how we illustrate the relationship
 
-
-    public enum Role {USER, ADMIN}
+    public enum Role {USER, ADMIN};
 
     public User(String username, String email, String password) {
         this.username = username;
@@ -36,7 +44,6 @@ public class User {
 
     public User() {
     }
-
 
     public Long getId() {
         return id;
@@ -86,7 +93,6 @@ public class User {
         this.role = role;
     }
 
-    // TODO: don't forget getters and setters for the posts!
     public List<Post> getPosts() {
         return posts;
     }
@@ -103,6 +109,7 @@ public class User {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", createdAt=" + createdAt +
+                ", role=" + role +
                 '}';
     }
 }
